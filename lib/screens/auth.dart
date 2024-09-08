@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 final _firebase = FirebaseAuth.instance;
+
 class Auth extends StatefulWidget {
   const Auth({super.key});
 
@@ -18,18 +19,19 @@ class _AuthState extends State<Auth> {
 
   var _enteredEmail = '';
   var _enteredPassword = '';
-  Future<void> _submit() async {
+  void _submit() async {
     final isValid = _form.currentState!.validate();
-
+    if (!isValid) {
+      return;
+    }
+    _form.currentState!.save();
     if (_isLogin) {
       final userCredentials = await _firebase.signInWithEmailAndPassword(
-            email: _enteredEmail, password: _enteredPassword);
-        print(userCredentials);
+          email: _enteredEmail, password: _enteredPassword);
     } else {
       try {
         final userCredentials = await _firebase.createUserWithEmailAndPassword(
             email: _enteredEmail, password: _enteredPassword);
-        print(userCredentials);
       } on FirebaseAuthException catch (error) {
         if (error.code == 'email-already-in-use') {
           // Handle email already in use case
