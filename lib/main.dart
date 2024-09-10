@@ -36,6 +36,9 @@ const App({super.key});
         }
         return const Auth();
        }),
+           debugShowCheckedModeBanner: false,
+
     );
+    
   }
 }
